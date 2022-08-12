@@ -1,0 +1,183 @@
+.top-nav {
+  display: flex;
+  flex-direction: row;
+  background-color: #eee;
+  border-radius: 2px;
+  position: absolute;
+  width: 100%;
+  bottom: 2px;
+  height: 50px;
+  z-index: 11;
+  justify-content: space-between;
+}
+
+.top-nav * {
+  margin: 5px 7px;
+}
+.top-nav button {
+  border: none;
+  padding: 7px;
+  border-radius: 8px;
+  transition: 0.3s ease;
+  font-family: "Krub", sans-serif;
+}
+.top-nav button:hover {
+  background-color: rgb(255, 177, 255);
+  cursor: pointer;
+}
+.top-nav input[type="color"] {
+  border: none;
+  width: 15px;
+  margin: 0;
+  padding: 0;
+  left: 0;
+  position: absolute;
+}
+.top-nav .show-color{
+  position: relative;
+  border: none;
+  width: 50px;
+  padding: 0;
+  height: calc(100% - 5px);
+  background-color: #000;
+}
+.top-nav #controls {
+  position: fixed;
+  display: flex;
+  top: 72%;
+  left: 0;
+  flex-direction: row;
+  width: fit-content;
+  height: fit-content;
+  background-color: #eee;
+  align-items: center;
+  border-radius: 5px;
+  padding-right: 5px;
+}
+.top-nav #controls div {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+.top-nav #controls div div {
+  display: flex;
+  flex-direction: row;
+  margin: 0 5px 2px 5px;
+}
+.top-nav #controls input[type="range"] {
+  position: absolute;
+  writing-mode: bt-lr; /* IE */
+  -webkit-appearance: slider-vertical; /* Chromium */
+  width: 5px;
+  height: 100%;
+  margin: 0;
+  right: 0;
+}
+.top-nav #controls .zoom {
+  height: 23px;
+  width: 23px;
+  border-radius: 100%;
+}
+.top-nav #controls #zoomIn {
+  background: url(./zoom-in.svg) no-repeat center;
+}
+.top-nav #controls #zoomOut {
+  background: url(./zoom-out.svg) no-repeat center;
+}
+
+#paint-container {
+  position: relative;
+  width: 100%;
+  height: calc(100% - 50px);
+  z-index: 9;
+  overflow: auto;
+}
+#paint {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border: 1px solid #000;
+  z-index: 10;
+}
+.userboard{
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: fit-content;
+  height: fit-content;
+  padding: 5px;
+  background-color: #161616aa;
+  border-radius: 5px 0 5px 5px;
+  z-index: 15;
+}
+.userboard .user{
+  background-color: #eee;
+  padding: 3px;
+  border: 1px #161616bb solid;
+}
+.colors {
+  display: flex;
+  flex-direction: row;
+}
+.color {
+  height: 30px;
+  width: 30px;
+  border-radius: 100%;
+}
+.color.active {
+  border: 1px solid rgb(255, 177, 255);
+}
+@media (max-width: 1020px) {
+  .color {
+    display: none;
+  }
+}
+.color.black {
+  background-color: black;
+}
+.color.red {
+  background-color: red;
+}
+.color.green {
+  background-color: green;
+}
+.color.blue {
+  background-color: blue;
+}
+.color.yellow {
+  background-color: yellow;
+}
+.trazos {
+  display: flex;
+  flex-direction: row;
+}
+.trazo {
+  height: 30px;
+  width: 30px;
+  border-radius: 100%;
+  border: 1px solid #000;
+}
+.trazo.active {
+  border: 1px solid rgb(255, 177, 255);
+}
+.trazo.round {
+  background: url(./pencil.svg) no-repeat center;
+}
+.trazo.square {
+  background: url(./vector-pen.svg) no-repeat center;
+}
+.trazo.butt {
+  background: url(./brush.svg) no-repeat center;
+}
+.trazo.eraser {
+  background: url(./eraser.svg) no-repeat center;
+}
+.trazo.fill {
+  background: url(./bucket.svg) no-repeat center;
+}
+.trazo.spray {
+  background: url(./spray.svg) no-repeat center;
+}
+.trazo.eyedropper {
+  background: url(./eyedropper.svg) no-repeat center;
+}

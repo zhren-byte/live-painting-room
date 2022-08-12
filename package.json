@@ -1,0 +1,27 @@
+{
+  "name": "live-painting-room",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "zhren",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.1",
+    "geoip-lite": "^1.4.5",
+    "socket.io": "^4.5.1"
+  },
+  "devDependencies": {},
+  "description": "A live painting room",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhren-byte/live-painting-room.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zhren-byte/live-painting-room/issues"
+  },
+  "homepage": "https://github.com/zhren-byte/live-painting-room#readme"
+}
