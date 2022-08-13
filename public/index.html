@@ -26,7 +26,7 @@
       <div id="game" class="">
         <div id="paint-container">
           <canvas id="paint"></canvas>
-          <img id="scream" width="220" height="277" src="./assets/brush.png" alt="The Scream" style="display: none;">
+          <img id="brushspray" width="220" height="277" src="./assets/img_the_scream.jpg" style="display: none;">
         </div>
         <div class="top-nav">
           <div id="controls">
@@ -48,16 +48,17 @@
               max="30"
               value="1"
             />
+            <input
+            type="range"
+            orient="vertical"
+            id="brush-opacity"
+            min="16"
+            max="255"
+            value="255"
+          />
           </div>
           <div class="show-color">
             <input type="color" id="color-picker" />
-          </div>
-          <div class="colors">
-            <div class="color black"></div>
-            <div class="color red"></div>
-            <div class="color green"></div>
-            <div class="color blue"></div>
-            <div class="color yellow"></div>
           </div>
           <div class="trazos">
             <div class="trazo round"></div>
@@ -66,6 +67,7 @@
             <div class="trazo eraser"></div>
             <div class="trazo spray"></div>
             <div class="trazo fill"></div>
+            <!-- <div class="trazo blur"></div> -->
             <div class="trazo eyedropper" id="startDropper"></div>
           </div>
         </div>

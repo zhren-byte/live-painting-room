@@ -5,6 +5,28 @@
     window.location.href = window.location.href;
   });
   let uname;
+  const prefix = "/";
+  function sendMessage() {
+    let message = app.querySelector(".chat-screen #message-input").value;
+    if (message.length == 0 || message.length >= 64) {
+      return;
+    }
+    const args = message.slice(prefix.length).trim().split(/ +/g);
+    const cmd = args.shift().toLowerCase();
+    if (message.startsWith(prefix)) {
+      socket.emit(cmd, args[0]);
+    } else {
+      renderMessage("my", {
+        username: uname,
+        text: message,
+      });
+      socket.emit("chat", {
+        username: uname,
+        text: message,
+      });
+    }
+    app.querySelector(".chat-screen #message-input").value = "";
+  }
   app
     .querySelector(".join-screen #join-user")
     .addEventListener("click", function () {
@@ -17,48 +39,22 @@
       app.querySelector(".join-screen").classList.remove("active");
       app.querySelector(".chat-screen").classList.add("active");
       app.querySelector("#game").classList.add("active");
-      requestAndShowPermission();
+      // requestAndShowPermission();
     });
   app
     .querySelector(".chat-screen #send-message")
-    .addEventListener("click", function () {
-      let message = app.querySelector(".chat-screen #message-input").value;
-      if (message.length == 0 || message.length >= 64) {
-        return;
-      }
-      renderMessage("my", {
-        username: uname,
-        text: message,
-      });
-      socket.emit("chat", {
-        username: uname,
-        text: message,
-      });
-      app.querySelector(".chat-screen #message-input").value = "";
-    });
-  document.addEventListener("keypress", function (e) {
-    if (e.key == "Enter") {
-      let message = app.querySelector(".chat-screen #message-input").value;
-      if (message.length == 0 || message.length >= 64) {
-        return;
-      }
-      renderMessage("my", {
-        username: uname,
-        text: message,
-      });
-      socket.emit("chat", {
-        username: uname,
-        text: message,
-      });
-      app.querySelector(".chat-screen #message-input").value = "";
-    }
-  });
+    .addEventListener("click", sendMessage);
   app
     .querySelector(".chat-screen #exit-chat")
     .addEventListener("click", function () {
       socket.emit("exituser", uname);
       window.location.href = window.location.href;
     });
+  document.addEventListener("keypress", function (e) {
+    if (e.key == "Enter") {
+      sendMessage();
+    }
+  });
   socket.on("board", function (users) {
     renderBoard(users);
   });
@@ -81,28 +77,17 @@
         el.setAttribute("class", "user my");
         el.innerHTML = `
         <div class="messages">${user[i].messages}</div>
+        <div class="messages">${user[i].reportes}</div>
             <div class="name">${user[i].name}</div>
         `;
         boardContainer.appendChild(el);
-        return;
       }
       el.innerHTML = `
+      <div class="messages">${user[i].messages}</div>
       <div class="messages">${user[i].messages}</div>
           <div class="name">${user[i].name}</div>
       `;
       boardContainer.appendChild(el);
-      let reportButton = document.createElement("button");
-      reportButton.setAttribute("class", "report");
-      reportButton.innerHTML = `<img src="./svg/flag.svg"/>`;
-      el.appendChild(reportButton);
-      reportButton.addEventListener("click", function () {
-        let username = user[i].name;
-        // if (username.length == 0) {
-        //   return;
-        // }
-        console.log(username + " Usuario reportado");
-        socket.emit("reportuser", username);
-      });
     }
   }
   function renderMessage(type, message) {
@@ -136,25 +121,25 @@
     messageContainer.scrollTop =
       messageContainer.scrollHeight - messageContainer.clientHeight;
   }
-  function requestAndShowPermission() {
-    Notification.requestPermission();
-  }
-  function showNotification(message) {
-    if (Notification.permission === "granted") {
-      let icon = "https://www.hellhades.tk/assets/icon.png";
-      let title = message.username;
-      let body = message.text;
-      let notification = new Notification(title, { body, icon });
-      notification.onclick = () => {
-        notification.close();
-        window.parent.focus();
-      };
-    } else if (Notification.permission === "default") {
-      requestAndShowPermission();
-    } else {
-      alert(message.text);
-    }
-  }
+  // function requestAndShowPermission() {
+  //   Notification.requestPermission();
+  // }
+  // function showNotification(message) {
+  //   if (Notification.permission === "granted") {
+  //     let icon = "https://www.hellhades.tk/assets/icon.png";
+  //     let title = message.username;
+  //     let body = message.text;
+  //     let notification = new Notification(title, { body, icon });
+  //     notification.onclick = () => {
+  //       notification.close();
+  //       window.parent.focus();
+  //     };
+  //   } else if (Notification.permission === "default") {
+  //     requestAndShowPermission();
+  //   } else {
+  //     alert(message.text);
+  //   }
+  // }
 
   var canvas = $("#paint");
   canvas.attr({
@@ -170,6 +155,7 @@
 
   var current = {
     color: "#000000",
+    opacity: "ff",
     linewidth: 1,
     typetrazo: "round",
   };
@@ -197,9 +183,19 @@
 
   socket.on("drawing", onDrawingEvent);
   socket.on("clean", onCleanEvent);
-
-  function drawLine(x0, y0, x1, y1, color, lineWidth, typeTrazo, emit) {
-    // console.log(x0, y0, x1, y1, color, lineWidth, typeTrazo, emit);
+  
+  function drawLine(
+    x0,
+    y0,
+    x1,
+    y1,
+    color,
+    opacity,
+    lineWidth,
+    typeTrazo,
+    emit
+  ) {
+    console.log(x0, y0, x1, y1, color,opacity, lineWidth, typeTrazo, emit);
     ctx.beginPath();
     if (eyedropperIsActive == true) {
       var pxData = ctx.getImageData(x0, y0, 1, 1);
@@ -217,8 +213,18 @@
     }
     switch (typeTrazo) {
       case "spray":
-        var image = document.getElementById("scream");
-        ctx.drawImage(image, x0, y0, lineWidth, lineWidth);
+        ctx.beginPath();
+        ctx.fillStyle = color;
+        for (var i = 10; i--; ) {
+          ctx.rect(
+            x0 + Math.random() * lineWidth - 10,
+            y1 + Math.random() * lineWidth - 10,
+            1,
+            1
+          );
+          ctx.fill();
+        }
+        ctx.closePath();
         if (!emit) {
           return;
         }
@@ -231,6 +237,7 @@
           x1: x1 / w,
           y1: y1 / h,
           color: color,
+          opacity: opacity,
           lW: lineWidth,
           tT: typeTrazo,
         });
@@ -238,8 +245,9 @@
       case "fill":
         ctx.beginPath();
         ctx.rect(0, 0, canvas.width(), canvas.height());
-        ctx.fillStyle = color;
+        ctx.fillStyle = `${color}${opacity}`;
         ctx.fill();
+        ctx.closePath();
         if (!emit) {
           return;
         }
@@ -252,14 +260,16 @@
           x1: w,
           y1: h,
           color: color,
+          opacity: opacity,
           lW: lineWidth,
           tT: typeTrazo,
         });
         break;
       default:
+        ctx.beginPath();
         ctx.moveTo(x0, y0);
         ctx.lineTo(x1, y1);
-        ctx.strokeStyle = color;
+        ctx.strokeStyle = `${color}${opacity}`;
         ctx.lineWidth = lineWidth;
         ctx.lineCap = typeTrazo;
         ctx.stroke();
@@ -277,9 +287,11 @@
           x1: x1 / w,
           y1: y1 / h,
           color: color,
+          opacity: opacity,
           lW: lineWidth,
           tT: typeTrazo,
         });
+        break;
     }
   }
 
@@ -303,6 +315,7 @@
       e.clientX || e.touches[0].clientX,
       e.clientY || e.touches[0].clientY,
       current.color,
+      current.opacity,
       current.linewidth,
       current.typetrazo,
       true
@@ -319,6 +332,7 @@
       e.clientX || e.touches[0].clientX,
       e.clientY || e.touches[0].clientY,
       current.color,
+      current.opacity,
       current.linewidth,
       current.typetrazo,
       true
@@ -326,21 +340,10 @@
     current.x = e.clientX || e.touches[0].clientX;
     current.y = e.clientY || e.touches[0].clientY;
   }
-
-  function onColorUpdate(e) {
-    if (e.target.classList.contains("active")) {
-      e.target.classList.remove("active");
-    } else {
-      e.target.classList.add("active");
-    }
-    colorUpdate(e.target.className.split(" ")[1]);
-    colorUpdate(e.target.className.split(" ")[1]);
-  }
   function colorUpdate(color) {
     current.color = color;
     showColor.style.backgroundColor = color;
   }
-
   function onTrazoUpdate(e) {
     if (e.target.classList.contains("active")) {
       e.target.classList.remove("active");
@@ -358,7 +361,7 @@
       case "fill":
         var w = canvas.width();
         var h = canvas.height();
-        drawLine(w, h, w, h, current.color, current.linewidth, "fill", true);
+        drawLine(w, h, w, h, current.color, current.opacity, current.linewidth, "fill", true);
         break;
       case "eyedropper":
         if (eyedropperIsActive == true) {
@@ -395,6 +398,7 @@
       data.x1 * w,
       data.y1 * h,
       data.color,
+      data.opacity,
       data.lW,
       data.tT
     );
@@ -405,6 +409,9 @@
   }
   $("#brush-size").on("input", function () {
     current.linewidth = this.value;
+  });
+  $("#brush-opacity").on("input", function () {
+    current.opacity = Math.abs(this.value).toString(16);
   });
   $("#color-picker").on("input", function () {
     current.color = this.value;

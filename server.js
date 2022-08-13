@@ -61,7 +61,7 @@ io.on("connection", function (socket) {
     );
   });
   socket.on("exituser", function (username) {
-    socket.broadcast.emit("update", username + " salio de la sala");
+    socket.disconnect();
   });
   socket.on("chat", function (message) {
     if (message.length == 0 || message.length >= 64) {

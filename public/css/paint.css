@@ -65,12 +65,12 @@
   margin: 0 5px 2px 5px;
 }
 .top-nav #controls input[type="range"] {
-  position: absolute;
+  position: relative;
   writing-mode: bt-lr; /* IE */
   -webkit-appearance: slider-vertical; /* Chromium */
   width: 5px;
   height: 100%;
-  margin: 0;
+  margin: 2px;
   right: 0;
 }
 .top-nav #controls .zoom {
@@ -145,38 +145,7 @@
   cursor: pointer;
   height: 10px;
 }
-.colors {
-  display: flex;
-  flex-direction: row;
-}
-.color {
-  height: 30px;
-  width: 30px;
-  border-radius: 100%;
-}
-.color.active {
-  border: 1px solid rgb(255, 177, 255);
-}
-@media (max-width: 1020px) {
-  .color {
-    display: none;
-  }
-}
-.color.black {
-  background-color: black;
-}
-.color.red {
-  background-color: red;
-}
-.color.green {
-  background-color: green;
-}
-.color.blue {
-  background-color: blue;
-}
-.color.yellow {
-  background-color: yellow;
-}
+
 .trazos {
   display: flex;
   flex-direction: row;
@@ -203,6 +172,9 @@
   background: url(../svg/eraser.svg) no-repeat center;
 }
 .trazo.fill {
+  background: url(../svg/bucket.svg) no-repeat center;
+}
+.trazo.blur {
   background: url(../svg/bucket.svg) no-repeat center;
 }
 .trazo.spray {
