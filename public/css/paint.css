@@ -79,10 +79,10 @@
   border-radius: 100%;
 }
 .top-nav #controls #zoomIn {
-  background: url(./zoom-in.svg) no-repeat center;
+  background: url(../svg/zoom-in.svg) no-repeat center;
 }
 .top-nav #controls #zoomOut {
-  background: url(./zoom-out.svg) no-repeat center;
+  background: url(../svg/zoom-out.svg) no-repeat center;
 }
 
 #paint-container {
@@ -105,15 +105,45 @@
   top: 0;
   width: fit-content;
   height: fit-content;
-  padding: 5px;
+  padding: 3px;
   background-color: #161616aa;
   border-radius: 5px 0 5px 5px;
   z-index: 15;
+  font-size: 8px;
 }
 .userboard .user{
-  background-color: #eee;
+  display: flex;
+  color: #fff;
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 5px;
+}
+.userboard .user.my{
+  background-color: #16161666;
+  overflow: hidden;
+}
+.userboard .user.my .messages{
+  border-left: none;
+  border-right: none;
+}
+.userboard .user .name{
   padding: 3px;
-  border: 1px #161616bb solid;
+  text-align: center;
+  width: 100%;
+}
+.userboard .user .messages{
+  padding: 3px;
+  text-align: center;
+  width: 40px;
+  
+}
+.userboard .user .report{
+  background: none;
+  border-radius: 100%;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  height: 10px;
 }
 .colors {
   display: flex;
@@ -161,23 +191,23 @@
   border: 1px solid rgb(255, 177, 255);
 }
 .trazo.round {
-  background: url(./pencil.svg) no-repeat center;
+  background: url(../svg/pencil.svg) no-repeat center;
 }
 .trazo.square {
-  background: url(./vector-pen.svg) no-repeat center;
+  background: url(../svg/vector-pen.svg) no-repeat center;
 }
 .trazo.butt {
-  background: url(./brush.svg) no-repeat center;
+  background: url(../svg/brush.svg) no-repeat center;
 }
 .trazo.eraser {
-  background: url(./eraser.svg) no-repeat center;
+  background: url(../svg/eraser.svg) no-repeat center;
 }
 .trazo.fill {
-  background: url(./bucket.svg) no-repeat center;
+  background: url(../svg/bucket.svg) no-repeat center;
 }
 .trazo.spray {
-  background: url(./spray.svg) no-repeat center;
+  background: url(../svg/spray.svg) no-repeat center;
 }
 .trazo.eyedropper {
-  background: url(./eyedropper.svg) no-repeat center;
+  background: url(../svg/eyedropper.svg) no-repeat center;
 }

@@ -1,14 +1,15 @@
 (function () {
   const app = document.querySelector(".app");
   const socket = io();
+  socket.on("serverestart", function () {
+    window.location.href = window.location.href;
+  });
   let uname;
-
-
   app
     .querySelector(".join-screen #join-user")
     .addEventListener("click", function () {
       let username = app.querySelector(".join-screen #username").value;
-      if (username.length == 0) {
+      if (username.length == 0 || username.length >= 14) {
         return;
       }
       socket.emit("newuser", username);
@@ -22,7 +23,7 @@
     .querySelector(".chat-screen #send-message")
     .addEventListener("click", function () {
       let message = app.querySelector(".chat-screen #message-input").value;
-      if (message.length == 0) {
+      if (message.length == 0 || message.length >= 64) {
         return;
       }
       renderMessage("my", {
@@ -67,13 +68,41 @@
   socket.on("chat", function (message) {
     renderMessage("other", message);
   });
+  socket.on("kick", () => {
+    socket.emit("kickreceive");
+  });
   function renderBoard(user) {
     let boardContainer = app.querySelector(".userboard");
-    let el = document.createElement("div");
-    for(let i = 1; i<=user.length; i++){
+    boardContainer.innerHTML = "";
+    for (let i = 0; i < user.length; i++) {
+      let el = document.createElement("div");
       el.setAttribute("class", "user");
-      el.innerText = user[i];
+      if (user[i].name == uname) {
+        el.setAttribute("class", "user my");
+        el.innerHTML = `
+        <div class="messages">${user[i].messages}</div>
+            <div class="name">${user[i].name}</div>
+        `;
+        boardContainer.appendChild(el);
+        return;
+      }
+      el.innerHTML = `
+      <div class="messages">${user[i].messages}</div>
+          <div class="name">${user[i].name}</div>
+      `;
       boardContainer.appendChild(el);
+      let reportButton = document.createElement("button");
+      reportButton.setAttribute("class", "report");
+      reportButton.innerHTML = `<img src="./svg/flag.svg"/>`;
+      el.appendChild(reportButton);
+      reportButton.addEventListener("click", function () {
+        let username = user[i].name;
+        // if (username.length == 0) {
+        //   return;
+        // }
+        console.log(username + " Usuario reportado");
+        socket.emit("reportuser", username);
+      });
     }
   }
   function renderMessage(type, message) {
@@ -134,7 +163,6 @@
     // width: 380*$("#paint-container")[0].offsetHeight/435,
     // height: 800*$("#paint-container")[0].offsetHeight/810,
   });
-  console.log($("#paint-container"));
   var colors = document.getElementsByClassName("colors");
   var trazos = document.getElementsByClassName("trazos");
   var showColor = document.querySelector(".show-color");
