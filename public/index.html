@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/paint.css" />
     <title>Painting-Room</title>
@@ -11,7 +11,7 @@
   </head>
   <body>
     <div class="app">
-      <div class="screen join-screen active">
+      <div class="screen join-screen  active">
         <div class="form">
           <div class="form-input">
             <label>Username</label>
@@ -26,11 +26,16 @@
       <div id="game" class="">
         <div id="paint-container">
           <canvas id="paint"></canvas>
-          <img id="brushspray" width="220" height="277" src="./assets/img_the_scream.jpg" style="display: none;">
+          <img
+            id="brushspray"
+            width="220"
+            height="277"
+            src="./assets/img_the_scream.jpg"
+            style="display: none"
+          />
         </div>
         <div class="top-nav">
           <div id="controls">
-            
             <div>
               <button id="undo-btn">Undo</button>
               <button id="clear-btn">Clear</button>
@@ -49,13 +54,13 @@
               value="1"
             />
             <input
-            type="range"
-            orient="vertical"
-            id="brush-opacity"
-            min="16"
-            max="255"
-            value="255"
-          />
+              type="range"
+              orient="vertical"
+              id="brush-opacity"
+              min="16"
+              max="255"
+              value="255"
+            />
           </div>
           <div class="show-color">
             <input type="color" id="color-picker" />
@@ -71,8 +76,7 @@
             <div class="trazo eyedropper" id="startDropper"></div>
           </div>
         </div>
-        <div class="userboard">
-        </div>
+        <div class="userboard"></div>
         <script
           src="https://code.jquery.com/jquery-3.3.1.js"
           integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
@@ -84,10 +88,47 @@
           <div class="logo">Chatroom</div>
           <button id="exit-chat">Exit</button>
         </div>
-        <div class="messages"></div>
+        <div class="messages">
+          <div class="message my-message">
+            <div>
+              <div class="name">Tú</div>
+              <div class="text">QUE ONDA CARLITOS</div>
+            </div>
+          </div>
+          <div class="message my-message">
+            <div>
+              <div class="name">Tú</div>
+              <div class="text">HACE TANTO QUE NO NOS VEMOS</div>
+            </div>
+          </div>
+          <div class="message other-message">
+            <div>
+              <div class="name">Carlitos</div>
+              <div class="text">Bien aca andamo</div>
+            </div>
+          </div>
+          <div class="update">
+              Juan entro a la sala
+          </div>
+        </div>
         <div class="typebox">
-          <input type="text" id="message-input" />
-          <button id="send-message">Send</button>
+          <div class="typebox-container"> 
+          <input type="text" id="message-input" placeholder="Type a message..." />
+          <button id="send-message">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+              style="color:white;"
+            >
+              <path
+                d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"
+              />
+            </svg>
+          </button>
+        </div>
         </div>
       </div>
     </div>

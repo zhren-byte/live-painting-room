@@ -23,6 +23,7 @@
       socket.emit("chat", {
         username: uname,
         text: message,
+        last: false,
       });
     }
     app.querySelector(".chat-screen #message-input").value = "";
@@ -97,7 +98,6 @@
       el.setAttribute("class", "message my-message");
       el.innerHTML = `
                 <div>
-                    <div class="name">Tú</div>
                     <div class="text">${message.text}</div>
                 </div>
             `;
@@ -105,12 +105,21 @@
     } else if (type == "other") {
       let el = document.createElement("div");
       el.setAttribute("class", "message other-message");
-      el.innerHTML = `
-                <div>
-                    <div class="name">${message.username}</div>
-                    <div class="text">${message.text}</div>
-                </div>
-            `;
+      console.log(message.last);
+      if(message.last === true){
+        el.innerHTML = `
+        <div>
+            <div class="text">${message.text}</div>
+        </div>
+        `;
+      }else{
+        el.innerHTML = `
+        <div>
+            <div class="name">${message.username}</div>
+            <div class="text">${message.text}</div>
+        </div>
+        `;
+      }
       messageContainer.appendChild(el);
     } else if (type == "update") {
       let el = document.createElement("div");

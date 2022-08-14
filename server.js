@@ -14,6 +14,7 @@ const hbs = require("hbs");
 
 var isIntervalInProgress = false;
 let users = [];
+let lastMessage; 
 
 app.set("view engine", "hbs");
 app.set("views", __dirname + "/views");
@@ -28,6 +29,7 @@ io.on("connection", function (socket) {
     isIntervalInProgress = true;
     setInterval(function () {
       socket.broadcast.emit("board", users);
+      socket.emit("board", users);
     }, 2000);
   }
   var address = socket.handshake.address;
@@ -71,8 +73,13 @@ io.on("connection", function (socket) {
       return;
     }
     try {
-      users.find((e) => e.id === socket.id).messages++;
+      let usuario = users.find((e) => e.id === socket.id);
+      if(lastMessage === usuario.id){
+        message.last = true;
+      }
+      usuario.messages++;
       socket.broadcast.emit("chat", message);
+      lastMessage = usuario.id;
     } catch (err) {
       socket.emit("serverestart");
     }
@@ -87,11 +94,17 @@ io.on("connection", function (socket) {
     if (reportes === undefined) return;
     let reportesFind = reportes.reports.usuarios.find((e) => e === socket.id);
     if (socket.id === reportes.id) {
-      socket.emit("update", `No te puedes reportar a ti mismo.`);
+      socket.emit("chat", {
+        username: "ReportBot",
+        text: "No te puedes reportar a ti mismo.",
+      });
       return;
     }
     if (reportesFind === socket.id) {
-      socket.emit("update", `${username} ya fue reportado.`);
+      socket.emit("chat", {
+        username: "ReportBot",
+        text: `${username} ya fue reportado.`,
+      });
       return;
     }
     reportes.reports.number++;
