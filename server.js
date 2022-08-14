@@ -50,7 +50,10 @@ io.on("connection", function (socket) {
       name: username,
       ip: socket.handshake.address,
       messages: 0,
-      reports: 0,
+      reports: {
+        number: 0,
+        usuarios: [],
+      },
     };
     users.push(user);
     socket.broadcast.emit("update", username + " entro a la sala");
@@ -81,10 +84,27 @@ io.on("connection", function (socket) {
   });
   socket.on("reportuser", function (username) {
     let reportes = users.find((e) => e.name === username);
-    reportes.reports++;
-    socket.broadcast.emit("update", `${reportes.name} fue reportado (${reportes.reports}/3)`);
-    socket.emit("update", `${reportes.name} fue reportado (${reportes.reports}/3)`);
-    if (reportes.reports >= 3) {
+    if (reportes === undefined) return;
+    let reportesFind = reportes.reports.usuarios.find((e) => e === socket.id);
+    if (socket.id === reportes.id) {
+      socket.emit("update", `No te puedes reportar a ti mismo.`);
+      return;
+    }
+    if (reportesFind === socket.id) {
+      socket.emit("update", `${username} ya fue reportado.`);
+      return;
+    }
+    reportes.reports.number++;
+    reportes.reports.usuarios.push(socket.id);
+    socket.broadcast.emit(
+      "update",
+      `${reportes.name} fue reportado (${reportes.reports.number}/3)`
+    );
+    socket.emit(
+      "update",
+      `${reportes.name} fue reportado (${reportes.reports.number}/3)`
+    );
+    if (reportes.reports.number >= 3) {
       socket.to(reportes.id).emit("kick");
     }
   });
@@ -98,7 +118,10 @@ io.on("connection", function (socket) {
           socket.handshake.address
         }) se desconecto.`
       );
-      socket.broadcast.emit("update", `${users.find((e) => e.id === socket.id).name} salio de la sala`);
+      socket.broadcast.emit(
+        "update",
+        `${users.find((e) => e.id === socket.id).name} salio de la sala`
+      );
       users.splice(
         users.findIndex((e) => e.id === socket.id),
         1

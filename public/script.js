@@ -77,14 +77,14 @@
         el.setAttribute("class", "user my");
         el.innerHTML = `
         <div class="messages">${user[i].messages}</div>
-        <div class="messages">${user[i].reportes}</div>
+        <div class="messages">${user[i].reports.number}</div>
             <div class="name">${user[i].name}</div>
         `;
         boardContainer.appendChild(el);
       }
       el.innerHTML = `
       <div class="messages">${user[i].messages}</div>
-      <div class="messages">${user[i].messages}</div>
+      <div class="messages">${user[i].reports.number}</div>
           <div class="name">${user[i].name}</div>
       `;
       boardContainer.appendChild(el);
