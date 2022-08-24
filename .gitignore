@@ -22,7 +22,8 @@ emojis.js
 .tmproj
 nbproject
 Thumbs.db
-
+carga.js
+game.js
 # Node modules
 /node_modules
 /assets

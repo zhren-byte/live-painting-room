@@ -4,10 +4,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/paint.css" />
     <title>Painting-Room</title>
     <link rel="shortcut icon" href="./assets/paint.ico" type="image/x-icon" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.4.2/phaser.min.js"></script>
   </head>
   <body>
     <div class="app">
@@ -23,7 +25,7 @@
         </div>
       </div>
 
-      <div id="game" class="">
+      <div id="pintura">
         <div id="paint-container">
           <canvas id="paint"></canvas>
           <img
@@ -83,13 +85,16 @@
           crossorigin="anonymous"
         ></script>
       </div>
+      <div id="game">
+
+      </div>
       <div class="screen chat-screen">
         <div class="header">
           <div class="logo">Chatroom</div>
           <button id="exit-chat">Exit</button>
         </div>
         <div class="messages">
-          <div class="message my-message">
+          <!-- <div class="message my-message">
             <div>
               <div class="name">Tú</div>
               <div class="text">QUE ONDA CARLITOS</div>
@@ -109,7 +114,7 @@
           </div>
           <div class="update">
               Juan entro a la sala
-          </div>
+          </div> -->
         </div>
         <div class="typebox">
           <div class="typebox-container"> 
