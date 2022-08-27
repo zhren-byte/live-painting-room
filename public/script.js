@@ -218,7 +218,7 @@
     lineWidth,
     typeTrazo,
     img,
-    emit,
+    emit
   ) {
     console.log(x0, y0, x1, y1, color, opacity, lineWidth, typeTrazo, emit);
     ctx.beginPath();
@@ -288,12 +288,12 @@
           img: null,
         });
       },
-      img: () =>{
+      img: () => {
         let bgImg = new Image();
-        bgImg.src = '/assets/'+ img +'.jpg';
+        bgImg.src = "/assets/" + img + ".jpg";
         bgImg.onload = () => {
-            ctx.drawImage(bgImg, 0, 0, canvasWidth, canvasHeight);
-        }
+          ctx.drawImage(bgImg, 0, 0, canvasWidth, canvasHeight);
+        };
         if (!emit) {
           return;
         }
@@ -477,7 +477,7 @@
     current.color = color;
     showColor.style.backgroundColor = color;
   }
-  function onImageBGUpdate(e){
+  function onImageBGUpdate(e) {
     e.target.className.split(" ")[1];
     switch (e.target.className.split(" ")[1]) {
       case "lake":
@@ -593,7 +593,7 @@
       data.opacity,
       data.lW,
       data.tT,
-      data.img,
+      data.img
     );
   }
 
@@ -656,7 +656,6 @@
     shot: false,
     frames: 10,
     update: function () {
-
       if (
         game.input.keyboard.isDown(Phaser.Keyboard.D) ||
         game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)
@@ -749,10 +748,30 @@
       "character"
     );
     player.sprite.frame = 16;
-    player.sprite.animations.add("walkBackward",[0, 1, 2, 3,4,5,6,7,8,9,10,11], 10,true);
-    player.sprite.animations.add("walkForward",[13, 14, 15, 16,17,18,19,20,21,22,23], 10,true);
-    player.sprite.animations.add("walkLeft",[24, 25, 26, 27,28,29,30,31,32,33,34,35], 10,true);
-    player.sprite.animations.add("walkRight",[36, 37,38,39,40,41,42,43,44,45,46,47,48], 10,true);
+    player.sprite.animations.add(
+      "walkBackward",
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      10,
+      true
+    );
+    player.sprite.animations.add(
+      "walkForward",
+      [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+      10,
+      true
+    );
+    player.sprite.animations.add(
+      "walkLeft",
+      [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35],
+      10,
+      true
+    );
+    player.sprite.animations.add(
+      "walkRight",
+      [36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48],
+      10,
+      true
+    );
     player.sprite.anchor.setTo(0.2, 0.2);
 
     game.world.setBounds(0, 0, WORLD_SIZE.w, WORLD_SIZE.h);
@@ -776,7 +795,14 @@
           var data = players_data[id];
           var p = CreateShip(data.x, data.y, data.animation);
           other_players[id] = p;
-          console.log("Created new player at (" + data.x + ", " + data.y + ")"+ data.animation);
+          console.log(
+            "Created new player at (" +
+              data.x +
+              ", " +
+              data.y +
+              ")" +
+              data.animation
+          );
         }
         players_found[id] = true;
 
