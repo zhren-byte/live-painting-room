@@ -84,7 +84,19 @@
 .top-nav #controls #zoomOut {
   background: url(../svg/zoom-out.svg) no-repeat center;
 }
-
+#pintura .pre-bg{
+  position: absolute;
+  z-index: 100;
+  right: 0 ;
+  bottom: 70px;
+  display: flex;
+  flex-direction: column;
+}
+.pre-bg .this-bg{
+  width: calc(1600px/8);
+  height: calc(900px/8);
+  border: #000 solid 1px;
+}
 #paint-container {
   position: relative;
   width: 100%;

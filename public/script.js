@@ -156,8 +156,8 @@
   //   }
   // }
 
-  var canvasWidth = 1000;
-  var canvasHeight = 600;
+  var canvasWidth = 880;
+  var canvasHeight = 700;
   var canvas = $("#paint");
   canvas.attr({
     width: canvasWidth,
@@ -167,6 +167,7 @@
   });
   var colors = document.getElementsByClassName("colors");
   var trazos = document.getElementsByClassName("trazos");
+  var bgImgs = document.getElementsByClassName("pre-bg");
   var showColor = document.querySelector(".show-color");
   var ctx = canvas[0].getContext("2d");
 
@@ -192,11 +193,11 @@
   canvas[0].addEventListener("touchcancel", onMouseUp, false);
   canvas[0].addEventListener("touchmove", throttle(onMouseMove, 10), false);
 
-  for (var i = 0; i < colors.length; i++) {
-    colors[i].addEventListener("click", onColorUpdate, false);
-  }
   for (var i = 0; i < trazos.length; i++) {
     trazos[i].addEventListener("click", onTrazoUpdate, false);
+  }
+  for (var i = 0; i < bgImgs.length; i++) {
+    bgImgs[i].addEventListener("click", onImageBGUpdate, false);
   }
 
   socket.on("drawing", onDrawingEvent);
@@ -216,7 +217,8 @@
     opacity,
     lineWidth,
     typeTrazo,
-    emit
+    img,
+    emit,
   ) {
     console.log(x0, y0, x1, y1, color, opacity, lineWidth, typeTrazo, emit);
     ctx.beginPath();
@@ -259,6 +261,7 @@
           opacity: opacity,
           lW: lineWidth,
           tT: typeTrazo,
+          img: null,
         });
       },
       fill: () => {
@@ -282,6 +285,31 @@
           opacity: opacity,
           lW: lineWidth,
           tT: typeTrazo,
+          img: null,
+        });
+      },
+      img: () =>{
+        let bgImg = new Image();
+        bgImg.src = '/assets/'+ img +'.jpg';
+        bgImg.onload = () => {
+            ctx.drawImage(bgImg, 0, 0, canvasWidth, canvasHeight);
+        }
+        if (!emit) {
+          return;
+        }
+        var w = canvas.width();
+        var h = canvas.height();
+
+        socket.emit("drawing", {
+          x0: w,
+          y0: h,
+          x1: w,
+          y1: h,
+          color: color,
+          opacity: opacity,
+          lW: lineWidth,
+          tT: typeTrazo,
+          img: img,
         });
       },
     };
@@ -310,6 +338,7 @@
         opacity: opacity,
         lW: lineWidth,
         tT: typeTrazo,
+        img: null,
       });
     };
     TYPE_TRAZOS[typeTrazo] ? TYPE_TRAZOS[typeTrazo]() : TYPE_TRAZOS_DEFAULT();
@@ -420,6 +449,7 @@
       current.opacity,
       current.linewidth,
       current.typetrazo,
+      null,
       true
     );
   }
@@ -437,6 +467,7 @@
       current.opacity,
       current.linewidth,
       current.typetrazo,
+      null,
       true
     );
     current.x = e.clientX || e.touches[0].clientX;
@@ -445,6 +476,53 @@
   function colorUpdate(color) {
     current.color = color;
     showColor.style.backgroundColor = color;
+  }
+  function onImageBGUpdate(e){
+    e.target.className.split(" ")[1];
+    switch (e.target.className.split(" ")[1]) {
+      case "lake":
+        drawLine(
+          0,
+          0,
+          0,
+          0,
+          current.color,
+          current.opacity,
+          current.linewidth,
+          "img",
+          "lake",
+          true
+        );
+        break;
+      case "house":
+        drawLine(
+          0,
+          0,
+          0,
+          0,
+          current.color,
+          current.opacity,
+          current.linewidth,
+          "img",
+          "house",
+          true
+        );
+        break;
+      case "mountain":
+        drawLine(
+          0,
+          0,
+          0,
+          0,
+          current.color,
+          current.opacity,
+          current.linewidth,
+          "img",
+          "mountain",
+          true
+        );
+        break;
+    }
   }
   function onTrazoUpdate(e) {
     if (e.target.classList.contains("active")) {
@@ -473,6 +551,7 @@
           current.opacity,
           current.linewidth,
           "fill",
+          null,
           true
         );
         break;
@@ -513,7 +592,8 @@
       data.color,
       data.opacity,
       data.lW,
-      data.tT
+      data.tT,
+      data.img,
     );
   }
 
@@ -548,11 +628,18 @@
   // Juego
   var ASSET_URL = "assets/world/";
 
-  var game = new Phaser.Game(canvasWidth, canvasHeight, Phaser.AUTO, "game", {
-    preload: preload,
-    create: create,
-    update: GameLoop,
-  }, true);
+  var game = new Phaser.Game(
+    canvasWidth,
+    canvasHeight,
+    Phaser.AUTO,
+    "game",
+    {
+      preload: preload,
+      create: create,
+      update: GameLoop,
+    },
+    true
+  );
 
   var WORLD_SIZE = { w: canvasWidth, h: canvasHeight };
 
@@ -564,37 +651,44 @@
     sprite: null, //Will hold the sprite when it's created
     speed_x: 0, // This is the speed it's currently moving at
     speed_y: 0,
-    speed: 0.5, // This is the parameter for how fast it should move
-    friction: 0.95,
+    speed: 2, // This is the parameter for how fast it should move
+    friction: 0.2,
     shot: false,
+    frames: 10,
     update: function () {
-      // Leap rotation towards mouse
-      var dx = game.input.mousePointer.x + game.camera.x - this.sprite.x;
-      var dy = game.input.mousePointer.y + game.camera.y - this.sprite.y;
-      var angle = Math.atan2(dy, dx) - Math.PI / 2;
-      var dir = (angle - this.sprite.rotation) / (Math.PI * 2);
-      dir -= Math.round(dir);
-      dir = dir * Math.PI * 2;
-      this.sprite.rotation += dir * 0.1;
 
-      // Move forward
+      if (
+        game.input.keyboard.isDown(Phaser.Keyboard.D) ||
+        game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)
+      ) {
+        this.speed_x += 1 * this.speed;
+        this.sprite.animations.play("walkRight", this.frames, true);
+      } else if (
+        game.input.keyboard.isDown(Phaser.Keyboard.A) ||
+        game.input.keyboard.isDown(Phaser.Keyboard.LEFT)
+      ) {
+        this.speed_x -= 1 * this.speed;
+        this.sprite.animations.play("walkLeft", this.frames, true);
+      }
+
       if (
         game.input.keyboard.isDown(Phaser.Keyboard.W) ||
         game.input.keyboard.isDown(Phaser.Keyboard.UP)
-        // game.input.touch.
       ) {
-        this.speed_x +=
-          Math.cos(this.sprite.rotation + Math.PI / 2) * this.speed;
-        this.speed_y +=
-          Math.sin(this.sprite.rotation + Math.PI / 2) * this.speed;
+        this.speed_y -= 1 * this.speed;
+        this.sprite.animations.play("walkBackward", this.frames, true);
+      } else if (
+        game.input.keyboard.isDown(Phaser.Keyboard.S) ||
+        game.input.keyboard.isDown(Phaser.Keyboard.DOWN)
+      ) {
+        this.speed_y += 1 * this.speed;
+        this.sprite.animations.play("walkForward", this.frames, true);
       }
-
       this.sprite.x += this.speed_x;
       this.sprite.y += this.speed_y;
 
       this.speed_x *= this.friction;
       this.speed_y *= this.friction;
-
       // Shoot bullet
       if (game.input.activePointer.leftButton.isDown && !this.shot) {
         var speed_x = Math.cos(this.sprite.rotation + Math.PI / 2) * 20;
@@ -604,7 +698,6 @@
         socket.emit("shoot-bullet", {
           x: this.sprite.x,
           y: this.sprite.y,
-          angle: this.sprite.rotation,
           speed_x: speed_x,
           speed_y: speed_y,
         });
@@ -617,63 +710,50 @@
       } else {
         this.sprite.alpha = 1;
       }
-
       // Tell the server we've moved
       socket.emit("move-player", {
         x: this.sprite.x,
         y: this.sprite.y,
-        angle: this.sprite.rotation,
+        animation: this.sprite.animations.currentAnim.name,
       });
     },
   };
 
-  function CreateShip(type, x, y, angle) {
+  function CreateShip(x, y) {
     // type is an int that can be between 1 and 6 inclusive
     // returns the sprite just created
-    var sprite = game.add.sprite(x, y, "ship" + String(type) + "_1");
-    sprite.rotation = angle;
-    sprite.anchor.setTo(0.5, 0.5);
+    var sprite = game.add.sprite(x, y, "character");
+    sprite.frame = 16;
+    sprite.anchor.setTo(0.2, 0.2);
     return sprite;
   }
 
   function preload() {
     game.load.crossOrigin = "Anonymous";
-
-    // Load all the ships
-    for (var i = 1; i <= 6; i++) {
-      game.load.image(
-        "ship" + String(i) + "_1",
-        ASSET_URL + "ship" + String(i) + "_1.png"
-      );
-      game.load.image(
-        "ship" + String(i) + "_2",
-        ASSET_URL + "ship" + String(i) + "_2.png"
-      );
-      game.load.image(
-        "ship" + String(i) + "_3",
-        ASSET_URL + "ship" + String(i) + "_3.png"
-      );
-      game.load.image(
-        "ship" + String(i) + "_4",
-        ASSET_URL + "ship" + String(i) + "_4.png"
-      );
-    }
+    game.load.spritesheet(
+      "character",
+      "assets/character/character_sprite.png",
+      32,
+      32,
+      48
+    );
 
     game.load.image("bullet", ASSET_URL + "cannon_ball.png");
-    game.load.image("caracter", "assets/img_the_scream.jpg");
   }
 
   function create() {
     game.stage.disableVisibilityChange = true;
-
-    // Create player
-    var player_ship_type = String(1);
     player.sprite = game.add.sprite(
-      (Math.random() * WORLD_SIZE.w) / 2 + WORLD_SIZE.w / 2,
-      (Math.random() * WORLD_SIZE.h) / 2 + WORLD_SIZE.h / 2,
-      "ship" + player_ship_type + "_4"
+      canvasWidth / 2,
+      canvasHeight / 2 - (Math.random() * WORLD_SIZE.h) / 2,
+      "character"
     );
-    player.sprite.anchor.setTo(0.5, 0.5);
+    player.sprite.frame = 16;
+    player.sprite.animations.add("walkBackward",[0, 1, 2, 3,4,5,6,7,8,9,10,11], 10,true);
+    player.sprite.animations.add("walkForward",[13, 14, 15, 16,17,18,19,20,21,22,23], 10,true);
+    player.sprite.animations.add("walkLeft",[24, 25, 26, 27,28,29,30,31,32,33,34,35], 10,true);
+    player.sprite.animations.add("walkRight",[36, 37,38,39,40,41,42,43,44,45,46,47,48], 10,true);
+    player.sprite.anchor.setTo(0.2, 0.2);
 
     game.world.setBounds(0, 0, WORLD_SIZE.w, WORLD_SIZE.h);
 
@@ -683,8 +763,7 @@
     socket.emit("new-player", {
       x: player.sprite.x,
       y: player.sprite.y,
-      angle: player.sprite.rotation,
-      type: 1,
+      animation: player.sprite.animations.currentAnim.name,
     });
     // Listen for other players connecting
     socket.on("update-players", function (players_data) {
@@ -695,9 +774,9 @@
         if (other_players[id] == undefined && id != socket.id) {
           // Make sure you don't create yourself
           var data = players_data[id];
-          var p = CreateShip(data.type, data.x, data.y, data.angle);
+          var p = CreateShip(data.x, data.y, data.animation);
           other_players[id] = p;
-          console.log("Created new player at (" + data.x + ", " + data.y + ")");
+          console.log("Created new player at (" + data.x + ", " + data.y + ")"+ data.animation);
         }
         players_found[id] = true;
 
@@ -705,7 +784,7 @@
         if (id != socket.id) {
           other_players[id].target_x = players_data[id].x; // Update target, not actual position, so we can interpolate
           other_players[id].target_y = players_data[id].y;
-          other_players[id].target_rotation = players_data[id].angle;
+          other_players[id].target_animation = players_data[id].animation;
         }
       }
       // Check if a player is missing and delete them
@@ -755,9 +834,8 @@
 
   function GameLoop() {
     player.update();
-
     // Move camera with player
-    var camera_x = player.sprite.x - canvasWidth/ 2;
+    var camera_x = player.sprite.x - canvasWidth / 2;
     var camera_y = player.sprite.y - canvasHeight / 2;
     game.camera.x += (camera_x - game.camera.x) * 0.08;
     game.camera.y += (camera_y - game.camera.y) * 0.08;
@@ -776,14 +854,8 @@
     for (var id in other_players) {
       var p = other_players[id];
       if (p.target_x != undefined) {
-        p.x += (p.target_x - p.x) * 0.16;
-        p.y += (p.target_y - p.y) * 0.16;
-        // Interpolate angle while avoiding the positive/negative issue
-        var angle = p.target_rotation;
-        var dir = (angle - p.rotation) / (Math.PI * 2);
-        dir -= Math.round(dir);
-        dir = dir * Math.PI * 2;
-        p.rotation += dir * 0.16;
+        p.x += (p.target_x - p.x) * 1;
+        p.y += (p.target_y - p.y) * 1;
       }
     }
   }

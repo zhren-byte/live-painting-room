@@ -9,11 +9,11 @@
     <link rel="stylesheet" href="./css/paint.css" />
     <title>Painting-Room</title>
     <link rel="shortcut icon" href="./assets/paint.ico" type="image/x-icon" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.4.2/phaser.min.js"></script>
+    <script src="phaser/phaser.js"></script>
   </head>
   <body>
     <div class="app">
-      <div class="screen join-screen  active">
+      <div class="screen join-screen">
         <div class="form">
           <div class="form-input">
             <label>Username</label>
@@ -25,15 +25,22 @@
         </div>
       </div>
 
-      <div id="pintura">
+      <div id="pintura" class="active">
         <div id="paint-container">
           <canvas id="paint"></canvas>
+        </div>
+        <div class="pre-bg">
           <img
-            id="brushspray"
-            width="220"
-            height="277"
-            src="./assets/img_the_scream.jpg"
-            style="display: none"
+            class="this-bg lake"
+            src="https://st.depositphotos.com/1000874/2367/i/450/depositphotos_23673477-stock-photo-lake.jpg"
+          />
+          <img
+            class="this-bg house"
+            src="https://i.pinimg.com/736x/44/17/1e/44171e50895c3b268e626cb380cf4534.jpg"
+          />
+          <img
+            class="this-bg mountain"
+            src="https://cdn.pixabay.com/photo/2020/03/18/10/09/mountain-4943472_1280.jpg"
           />
         </div>
         <div class="top-nav">
@@ -85,9 +92,7 @@
           crossorigin="anonymous"
         ></script>
       </div>
-      <div id="game">
-
-      </div>
+      <div id="game" class="active"></div>
       <div class="screen chat-screen">
         <div class="header">
           <div class="logo">Chatroom</div>
@@ -117,23 +122,27 @@
           </div> -->
         </div>
         <div class="typebox">
-          <div class="typebox-container"> 
-          <input type="text" id="message-input" placeholder="Type a message..." />
-          <button id="send-message">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              viewBox="0 0 16 16"
-              style="color:white;"
-            >
-              <path
-                d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"
-              />
-            </svg>
-          </button>
-        </div>
+          <div class="typebox-container">
+            <input
+              type="text"
+              id="message-input"
+              placeholder="Type a message..."
+            />
+            <button id="send-message">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+                style="color: white"
+              >
+                <path
+                  d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>

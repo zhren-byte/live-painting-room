@@ -48,7 +48,7 @@ io.on("connection", function (socket) {
     if (players[socket.id] == undefined) return; // Happens if the server restarts and a client is still connected
     players[socket.id].x = position_data.x;
     players[socket.id].y = position_data.y;
-    players[socket.id].angle = position_data.angle;
+    players[socket.id].animation = position_data.animation;
     io.emit("update-players", players);
   });
 
@@ -169,6 +169,8 @@ io.on("connection", function (socket) {
       delete players[socket.id];
       io.emit("update-players", players);
     } catch (err) {
+      delete players[socket.id];
+      io.emit("update-players", players);
       console.log(`--> Usuario no autenticado fue desconectado`);
     }
   });
