@@ -1,231 +1,233 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Krub:wght@300;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Krub:wght@300;500;600&display=swap");
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    user-select: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
 }
-body{
-    font-family: "Krub", sans-serif;
+body {
+  font-family: "Krub", sans-serif;
 }
-.app{
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    background: #fff;
+.app {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  background: #fff;
 }
 .app > .screen {
-    display: none;
+  display: none;
 }
 .screen.active {
-    display: block;
-    width: 30%;
-    height: 100%;
-    min-width: 400px;
+  display: block;
+  width: 30%;
+  height: 100%;
+  min-width: 400px;
 }
 .app > #pintura {
-    display: none;
+  display: none;
 }
 #pintura.active {
-    display: block;
-    width: 70%;
-    height: 100%;
+  display: block;
+  width: 70%;
+  height: 100%;
 }
-.app > #game{
-    display: none;
+.app > #game {
+  display: none;
 }
 #game.active {
-    display: block;
-    position: fixed;
-    width: 750px;
-    height: 500px;
-    z-index: 4;
+  display: block;
+  position: fixed;
+  width: 750px;
+  height: 500px;
+  z-index: 4;
 }
 
-.screen .form{
-    position:absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    max-width: 400px;
+.screen .form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 400px;
 }
 
-.screen .form-input{
-    width: 100%;
-    margin: 20px 0;
+.screen .form-input {
+  width: 100%;
+  margin: 20px 0;
 }
-.screen h2{
-    margin-bottom: 20px;
-    font-size: 30px;
-    color: #111;
-    border-bottom: 4px solid #555;
-    padding: 5px 0;
-    display: inline-block
+.screen h2 {
+  margin-bottom: 20px;
+  font-size: 30px;
+  color: #111;
+  border-bottom: 4px solid #555;
+  padding: 5px 0;
+  display: inline-block;
 }
-.screen .form-input label{
-    display:block;
-    margin-bottom: 5px;
+.screen .form-input label {
+  display: block;
+  margin-bottom: 5px;
 }
-.screen .form-input input{
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #555;
-    font-size: 16px;
+.screen .form-input input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #555;
+  font-size: 16px;
 }
-.screen .form-input button{
-    padding: 10px 20px;
-    background: #111;
-    color: #eee;
-    font-size: 16px;
-    cursor: pointer;
-    outline: none;
-    border: none;
+.screen .form-input button {
+  padding: 10px 20px;
+  background: #111;
+  color: #eee;
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+  border: none;
 }
 
 /* Chat */
-.chat-screen{
-    background: rgba(10, 14, 14, 0.95);
+.chat-screen {
+  background: rgba(10, 14, 14, 0.95);
 }
 .chat-screen .header {
-    background: transparent;
-    height: 45px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-
+  background: transparent;
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
 }
-.chat-screen .header .logo{
-    font-size:  18px;
-    color: #eee;
-    font-weight: 600;
+.chat-screen .header .logo {
+  font-size: 18px;
+  color: #eee;
+  font-weight: 600;
 }
-.chat-screen .header button{
-    padding: 5px 20px;
-    border: 1px solid #eee;
-    background: transparent;
-    font-family: "Krub", sans-serif;
-    color: #eee;
-    font-size: 15px;
-    cursor: pointer;
-    outline: none;
+.chat-screen .header button {
+  padding: 5px 20px;
+  border: 1px solid #eee;
+  background: transparent;
+  font-family: "Krub", sans-serif;
+  color: #eee;
+  font-size: 15px;
+  cursor: pointer;
+  outline: none;
 }
-.chat-screen .messages{
-    width: 100%;
-    height: calc(100% - 100px);
-    background: transparent;
-    overflow: auto;
+.chat-screen .messages {
+  width: 100%;
+  height: calc(100% - 100px);
+  background: transparent;
+  overflow: auto;
 }
 .chat-screen .messages .message {
-    display: flex;
-    padding: 5px;
+  display: flex;
+  padding: 5px;
 }
 .chat-screen .messages .message > div {
-    max-width: 80%;
-    background: #14181a;
-    font-size: 13px;
-    color: #a3a3a3;
-    padding: 0.4em 0.7em;
-    line-height: 1.4;
-    border-radius: 6px;
-    border: 1px rgba(255, 255, 255, 0.199) solid;
+  max-width: 80%;
+  background: #14181a;
+  font-size: 13px;
+  color: #a3a3a3;
+  padding: 0.4em 0.7em;
+  line-height: 1.4;
+  border-radius: 6px;
+  border: 1px rgba(255, 255, 255, 0.199) solid;
 }
 .chat-screen .messages .message.my-message {
-    justify-content: flex-end;
+  justify-content: flex-end;
 }
 .chat-screen .messages .message.other-message {
-    justify-content: flex-start;
+  justify-content: flex-start;
 }
 
-.chat-screen .messages .message .name{
-    font-size: 13px;
-    color: rgb(129, 129, 129);
-    margin-bottom: 5px;
+.chat-screen .messages .message .name {
+  font-size: 13px;
+  color: rgb(129, 129, 129);
+  margin-bottom: 5px;
 }
-.chat-screen .messages .message .text{
-    word-wrap: break-word;
+.chat-screen .messages .message .text {
+  word-wrap: break-word;
 }
-.chat-screen .messages .update{
-    color: rgb(184, 184, 184);
-    text-align: center;
-    padding: 10px;
-    font-style: italic;
+.chat-screen .messages .update {
+  color: rgb(184, 184, 184);
+  text-align: center;
+  padding: 10px;
+  font-style: italic;
 }
-.chat-screen .typebox{
-    background: #131719;
-    border-radius: 12px;
-    padding: 0 1em;
-    height: 54px;
+.chat-screen .typebox {
+  background: #131719;
+  border-radius: 12px;
+  padding: 0 1em;
+  height: 54px;
 }
-.chat-screen .typebox .typebox-container{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    height: 100%;
+.chat-screen .typebox .typebox-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
 }
-.chat-screen .typebox input{
-    width: 100%;
-    height: 100%;
-    outline: none;
-    position: relative;
-    color: #d1d1d1;
-    font-size: 15px;
-    background: transparent;
-    border: 0;
-    letter-spacing: 1px;
-    font-family: "Krub", sans-serif;
-    resize: none;
+.chat-screen .typebox input {
+  width: 100%;
+  height: 100%;
+  outline: none;
+  position: relative;
+  color: #d1d1d1;
+  font-size: 15px;
+  background: transparent;
+  border: 0;
+  letter-spacing: 1px;
+  font-family: "Krub", sans-serif;
+  resize: none;
 }
-.chat-screen .typebox button{
-    background: #8147fc;
-    height: 34px;
-    min-width: 34px;
-    border-radius: 50%;
-    transition: .3s ease;
-    border:none;
+.chat-screen .typebox button {
+  background: #8147fc;
+  height: 34px;
+  min-width: 34px;
+  border-radius: 50%;
+  transition: 0.3s ease;
+  border: none;
 }
 button svg {
-    margin: 9px;
+  margin: 9px;
 }
-.chat-screen .typebox button:hover{
-    background: #222;
+.chat-screen .typebox button:hover {
+  background: #222;
 }
 
-#pintura{
-    background-color: #fff;
-    position: relative;
-    text-align: center;
+#pintura {
+  background-color: #fff;
+  position: relative;
+  text-align: center;
 }
 
 @media (max-width: 783px) {
-    body{
-        overflow: none;
-    }
-    .app{
-        flex-direction: column;
-    }
-    .screen.active {
-        display: block;
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 30%;
-        min-width: 400px;
-    }
-    #pintura.active {
-        width: 100%;
-        height: 70%;
-    }
-    .chat-screen .typebox{
-        height: 30px;
-    }
-    .chat-screen .typebox input{
-        height: 30px;
-    }
-    .chat-screen .typebox button{
-        font-size: 14px;
-    }
+  body {
+    overflow: none;
+  }
+  .app {
+    flex-direction: column;
+  }
+  .screen.active {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 30%;
+    min-width: 400px;
+  }
+  #pintura.active {
+    width: 100%;
+    height: 70%;
+  }
+  #pintura .pre-bg {
+    display: none;
+  }
+  .chat-screen .typebox {
+    height: 30px;
+  }
+  .chat-screen .typebox input {
+    height: 30px;
+  }
+  .chat-screen .typebox button {
+    font-size: 14px;
+  }
 }

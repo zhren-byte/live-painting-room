@@ -220,7 +220,7 @@
     img,
     emit
   ) {
-    console.log(x0, y0, x1, y1, color, opacity, lineWidth, typeTrazo, emit);
+    // console.log(x0, y0, x1, y1, color, opacity, lineWidth, typeTrazo, emit);
     ctx.beginPath();
     if (eyedropperIsActive == true) {
       var pxData = ctx.getImageData(x0, y0, 1, 1);
@@ -713,7 +713,7 @@
       socket.emit("move-player", {
         x: this.sprite.x,
         y: this.sprite.y,
-        animation: this.sprite.animations.currentAnim.name,
+        animation: this.sprite.frame,
       });
     },
   };
@@ -782,7 +782,7 @@
     socket.emit("new-player", {
       x: player.sprite.x,
       y: player.sprite.y,
-      animation: player.sprite.animations.currentAnim.name,
+      animation: player.sprite.frame,
     });
     // Listen for other players connecting
     socket.on("update-players", function (players_data) {
@@ -795,14 +795,6 @@
           var data = players_data[id];
           var p = CreateShip(data.x, data.y, data.animation);
           other_players[id] = p;
-          console.log(
-            "Created new player at (" +
-              data.x +
-              ", " +
-              data.y +
-              ")" +
-              data.animation
-          );
         }
         players_found[id] = true;
 
@@ -810,7 +802,7 @@
         if (id != socket.id) {
           other_players[id].target_x = players_data[id].x; // Update target, not actual position, so we can interpolate
           other_players[id].target_y = players_data[id].y;
-          other_players[id].target_animation = players_data[id].animation;
+          other_players[id].target_frame = players_data[id].animation;
         }
       }
       // Check if a player is missing and delete them
@@ -857,14 +849,8 @@
       }
     });
   }
-
   function GameLoop() {
     player.update();
-    // Move camera with player
-    var camera_x = player.sprite.x - canvasWidth / 2;
-    var camera_y = player.sprite.y - canvasHeight / 2;
-    game.camera.x += (camera_x - game.camera.x) * 0.08;
-    game.camera.y += (camera_y - game.camera.y) * 0.08;
 
     // Each player is responsible for bringing their alpha back up on their own client
     // Make sure other players flash back to alpha = 1 when they're hit
@@ -882,6 +868,7 @@
       if (p.target_x != undefined) {
         p.x += (p.target_x - p.x) * 1;
         p.y += (p.target_y - p.y) * 1;
+        p.frame = p.target_frame;
       }
     }
   }
